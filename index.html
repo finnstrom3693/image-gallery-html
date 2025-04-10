@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coral Gallery - Masonry</title>
+    <link rel="icon" href="./images/gallery_icon.png">
+    <!-- <link rel="stylesheet" href="./css/styles.css"> -->
+    <style>
+        :root {
+            --accent-coral: #FF6F61;
+            --accent-coral-light: #FF8C82;
+            --accent-coral-dark: #E05A4E;
+            --text-dark: #333333;
+            --text-light: #FFFFFF;
+            --bg-light: #F8F8F8;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-light);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: var(--accent-coral);
+            color: var(--text-light);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .burger {
+            display: none;
+            cursor: pointer;
+        }
+
+        .burger div {
+            width: 25px;
+            height: 3px;
+            background-color: var(--text-light);
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .page-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--text-dark);
+        }
+
+        .page-title h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-title p {
+            font-size: 1.1rem;
+            color: #666;
+        }
+
+        /* Masonry Gallery */
+        .masonry-gallery {
+            column-count: 3;
+            column-gap: 1.5rem;
+        }
+
+        .gallery-item {
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        }
+
+        .gallery-img-container {
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .gallery-img {
+            width: 100%;
+            display: block;
+            max-height: 500px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-img-container:hover .gallery-img {
+            transform: scale(1.03);
+        }
+
+        .gallery-content {
+            padding: 1.5rem;
+        }
+
+        .gallery-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--accent-coral-dark);
+        }
+
+        .gallery-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .view-btn {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            background-color: var(--accent-coral);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .view-btn:hover {
+            background-color: var(--accent-coral-dark);
+        }
+
+        /* Lightbox Effect */
+        .gallery-img-container:hover:after {
+            content: '🔍 Click to view full size';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1rem;
+            color: white;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 10px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            width: 80%;
+            pointer-events: none;
+        }
+
+        @media screen and (max-width: 992px) {
+            .masonry-gallery {
+                column-count: 2;
+            }
+        }
+
+        @media screen and (max-width: 768px) {
+            .nav-links {
+                position: absolute;
+                right: 0;
+                height: calc(100vh - 4rem);
+                top: 4rem;
+                background-color: var(--accent-coral);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                width: 50%;
+                transform: translateX(100%);
+                transition: transform 0.5s ease-in;
+                padding-top: 2rem;
+            }
+
+            .nav-links li {
+                margin: 1rem 0;
+            }
+
+            .nav-active {
+                transform: translateX(0%);
+            }
+
+            .burger {
+                display: block;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .masonry-gallery {
+                column-count: 1;
+            }
+
+            .page-title h1 {
+                font-size: 2rem;
+            }
+            
+            .gallery-img-container:hover:after {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
+        }
+
+        /* Animation for mobile menu */
+        .toggle .line1 {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+        .toggle .line2 {
+            opacity: 0;
+        }
+
+        .toggle .line3 {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="logo">CORAL GALLERY</div>
+            <ul class="nav-links">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Gallery</a></li>
+                <li><a href="#">Collections</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+            <div class="burger">
+                <div class="line1"></div>
+                <div class="line2"></div>
+                <div class="line3"></div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-title">
+            <h1>Explore Our Gallery</h1>
+            <p>Hosting Image as Static Site Gallery</p>
+        </div>
+
+        <div class="masonry-gallery">
+            <!-- Item 1 - Portrait orientation -->
+            <div class="gallery-item">
+                <a href="./images/Star_of_Hope.jpg" target="_blank" class="gallery-img-container">
+                    <img src="./images/Star_of_Hope.jpg" alt="Mountain Landscape" class="gallery-img">
+                </a>
+                <div class="gallery-content">
+                    <h3 class="gallery-title">Star of Hope WN Cover</h3>
+                    <p class="gallery-desc">Cover of my wn about alien,gadget,futuristic nation race battle to defend national interest</p>
+                    <a href="./images/Star_of_Hope.jpg" target="_blank" class="view-btn">View Details</a>
+                </div>
+            </div>
+
+            <!-- Item 2 - Landscape orientation -->
+            <div class="gallery-item">
+                <a href="./images/Heartbreak_Painstar.png" target="_blank" class="gallery-img-container">
+                    <img src="./images/Heartbreak_Painstar.png" alt="Ocean Waves" class="gallery-img">
+                </a>
+                <div class="gallery-content">
+                    <h3 class="gallery-title">Heartbreak Painstar</h3>
+                    <p class="gallery-desc">Cover of my wn about cyber rebel low land many only force vs futuristic government force Wing Patriot Knight</p>
+                    <a href="./images/Heartbreak_Painstar.png" target="_blank" class="view-btn">View Details</a>
+                </div>
+            </div>
+
+            <!-- Item 3 - Square orientation -->
+            <div class="gallery-item">
+                <a href="./images/n77.png" target="_blank" class="gallery-img-container">
+                    <img src="./images/n77.png" alt="Urban Architecture" class="gallery-img">
+                </a>
+                <div class="gallery-content">
+                    <h3 class="gallery-title">N77 Logo</h3>
+                    <p class="gallery-desc">None</p>
+                    <a href="./images/n77.png" target="_blank" class="view-btn">View Details</a>
+                </div>
+            </div>
+
+            <!-- Item 4 - Tall portrait orientation -->
+            <div class="gallery-item">
+                <a href="./images/n77aqua.png" target="_blank" class="gallery-img-container">
+                    <img src="./images/n77aqua.png" alt="Forest Path" class="gallery-img">
+                </a>
+                <div class="gallery-content">
+                    <h3 class="gallery-title">N77 Aqua Logo</h3>
+                    <p class="gallery-desc">None</p>
+                    <a href="./images/n77aqua.png" target="_blank" class="view-btn">View Details</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <a href="./images/karambit_universe.png" target="_blank" class="gallery-img-container">
+                    <img src="./images/karambit_universe.png" alt="Forest Path" class="gallery-img">
+                </a>
+                <div class="gallery-content">
+                    <h3 class="gallery-title">Karambit Universe Logo</h3>
+                    <p class="gallery-desc">None</p>
+                    <a href="./images/karambit_universe.png" target="_blank" class="view-btn">View Details</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <a href="./images/training_ground.png" target="_blank" class="gallery-img-container">
+                    <img src="./images/training_ground.png" alt="Forest Path" class="gallery-img">
+                </a>
+                <div class="gallery-content">
+                    <h3 class="gallery-title">Training Ground Logo</h3>
+                    <p class="gallery-desc">None</p>
+                    <a href="./images/training_ground.png" target="_blank" class="view-btn">View Details</a>
+                </div>
+            </div>
+
+            <div class="gallery-item">
+                <a href="./images/ligariz_writing.png" target="_blank" class="gallery-img-container">
+                    <img src="./images/ligariz_writing.png" alt="Forest Path" class="gallery-img">
+                </a>
+                <div class="gallery-content">
+                    <h3 class="gallery-title">Ligariz Writing Logo</h3>
+                    <p class="gallery-desc">None</p>
+                    <a href="./images/ligariz_writing.png" target="_blank" class="view-btn">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const burger = document.querySelector('.burger');
+            const nav = document.querySelector('.nav-links');
+            const navLinks = document.querySelectorAll('.nav-links li');
+
+            // Toggle navigation
+            burger.addEventListener('click', () => {
+                nav.classList.toggle('nav-active');
+                burger.classList.toggle('toggle');
+            });
+
+            // Close menu when clicking a link
+            navLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    nav.classList.remove('nav-active');
+                    burger.classList.remove('toggle');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
