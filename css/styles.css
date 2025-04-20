@@ -123,6 +123,7 @@ body {
 .gallery-img-container {
     position: relative;
     overflow: hidden;
+    cursor: pointer;
 }
 
 .gallery-img {
@@ -130,6 +131,11 @@ body {
     display: block;
     max-height: 500px;
     object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.gallery-img-container:hover .gallery-img {
+    transform: scale(1.03);
 }
 
 .gallery-content {
@@ -167,20 +173,22 @@ body {
 
 /* Lightbox Effect */
 .gallery-img-container:hover:after {
-    content: '🔍';
+    content: '🔍 Click to view full size';
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2rem;
+    font-size: 1rem;
     color: white;
-    background-color: rgba(0, 0, 0, 0.4);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 10px 15px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    text-align: center;
+    width: 80%;
+    pointer-events: none;
 }
 
 @media screen and (max-width: 992px) {
@@ -225,6 +233,11 @@ body {
 
     .page-title h1 {
         font-size: 2rem;
+    }
+    
+    .gallery-img-container:hover:after {
+        font-size: 0.8rem;
+        padding: 8px 12px;
     }
 }
 
